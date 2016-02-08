@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Velociraptor Problem</title>
+
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="http://getbootstrap.com/examples/justified-nav/justified-nav.css" rel="stylesheet">
+
+    <script src="raptor.js"></script>
+
+<style>
+    body {
+        background-color: lightgrey;
+        font-family: sans-serif;
+    }
+    svg {
+        background-color: rgba(200,200,200,0.9);
+    }
+
+    g {
+       fill: none;
+       stroke: black;
+       shape-rendering: crispEdges;
+       }
+
+</style>
+</head>
+
+<body>
+    <div class="container">
+
+         <div class="jumbotron">
+
+             <svg id="visualisation" width="800" height="500"></svg>
+             <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+             <script>
+
+
+               var vis = d3.select("#visualisation"),
+                   WIDTH = 800,
+                   HEIGHT = 500,
+                   MARGINS = {
+                       top: 20,
+                       right: 30,
+                       bottom: 20,
+                       left: 50
+                   },
+
+                   xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([0,6.4]),
+                   yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([-40,40]),
+
+                   xAxis = d3.svg.axis()
+                   .scale(xScale)
+                    .ticks(10)
+                    .tickSize(2),
+
+                   yAxis = d3.svg.axis()
+                   .scale(yScale)
+                   .ticks(10)
+                   .tickSize(2)
+                   .orient("right");
+
+                   vis.append("svg:g")
+                   .attr("transform", "translate(0," + ((HEIGHT - MARGINS.bottom)/2 + 10) + ")")
+                     .call(xAxis);
+
+                   vis.append("svg:g")
+                    .attr("transform", "translate(" + (WIDTH - MARGINS.right) + ",0)")
+                     .call(yAxis);
+
+                     var lineGen = d3.svg.line()
+                     .x(function(d) {
+                       return xScale(d.time);
+                     })
+                     .y(function(d) {
+                       return yScale(d.distance);
+                     });
+
+                     vis.append('svg:path')
+                      .attr('d', lineGen(human))
+                      .attr('stroke', 'pink')
+                      .attr('stroke-width', 3)
+                      .attr('fill', 'none');
+
+                      vis.append('svg:path')
+                       .attr('d', lineGen(velociraptor))
+                       .attr('stroke', 'purple')
+                       .attr('stroke-width', 3)
+                       .attr('fill', 'none');
+
+            </script>
+        </div>
+    </div>
+</body>
+
+</html>
